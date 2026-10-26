@@ -15,7 +15,7 @@ macOS stores nonsecret `backgroundMode` in UserDefaults, bundle `dev.tavra.tavra
 
 NSStatusItem titled T with tooltip TAVRA has Open and explicit Quit menu items. Window close/⌘W hides via `orderOut` when the setting and menu-bar item are available. It does not close the NSWindow or destroy the engine. Dock reopen brings the same window forward. Quit menu/⌘Q calls normal application termination and cleans up the status item and method handler. Closing with background disabled exits normally. No LSUIElement flag: Dock remains available.
 
-AppDelegate initialization is invoked from MainFlutterWindow after plugin registration. Existing generated registration stays owned by the UI integration. Product name is TAVRA. Tray glyph is a plain template letter, not an invented VPN status indicator; product icon artwork conversion is deferred.
+AppDelegate initialization runs in applicationDidFinishLaunching after nib outlet wiring and plugin registration. Existing generated registration stays owned by the UI integration. Product name is TAVRA. Tray glyph is a plain template letter, not an invented VPN status indicator; product icon artwork conversion is deferred.
 
 ## Windows
 
@@ -30,3 +30,7 @@ Window-style close semantics do not apply. A real active VPN must belong to VpnS
 ## Verification
 
 2026-10-27: `swiftc -frontend -parse` passes for both native Swift files. ARM64/macOS13 `swiftc -typecheck` with local FlutterMacOS framework passes, using a temporary no-op RegisterGeneratedPlugins declaration because generated shared_preferences_foundation module requires Flutter's full build pipeline. This verifies the native lifecycle API types, not plugins or launch. Parent coordinates full Flutter macOS build and real CUA close/menu/Dock reopen and explicit-exit acceptance. Windows source and CMake linkage prepared; actual MSVC/runtime verification remains pending.
+
+Regression update: lifecycle setup runs in applicationDidFinishLaunching after nib outlet wiring. Both performClose and direct NSWindow.close are intercepted; the latter covers direct/accessibility close paths. Last-window termination returns false when background hiding is available. Native AppKit harness `macos/Runner/LifecycleTests/verify.sh` passes 8 assertions for direct/menu close, reopening the same window and retained content. It uses a test delegate without launching Flutter engine or changing preferences, so actual nib/menu initialization still requires full app CUA acceptance.
+
+Actual parent CUA acceptance (2026-10-27): accessibility close button leaves TAVRA running; existing window can be raised again and renders correctly; explicit Cmd-Q terminates the process. Native process presence was checked independently before explicit quit and absence after it. Initial close regression was reproduced before the fix. Windows and Android checks above remain pending.

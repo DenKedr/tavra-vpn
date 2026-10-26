@@ -12,7 +12,16 @@ class AppDelegate: FlutterAppDelegate {
     UserDefaults.standard.object(forKey: backgroundKey) as? Bool ?? true
   }
 
+  override func applicationDidFinishLaunching(_ notification: Notification) {
+    super.applicationDidFinishLaunching(notification)
+    if let window = mainFlutterWindow,
+       let controller = window.contentViewController as? FlutterViewController {
+      configureLifecycle(window: window, controller: controller)
+    }
+  }
+
   func configureLifecycle(window: NSWindow, controller: FlutterViewController) {
+    guard lifecycleChannel == nil else { return }
     retainedWindow = window
     window.isReleasedWhenClosed = false
     let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -59,7 +68,9 @@ class AppDelegate: FlutterAppDelegate {
     return true
   }
 
-  override func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }
+  override func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+    !shouldHideOnClose()
+  }
 
   override func applicationWillTerminate(_ notification: Notification) {
     lifecycleChannel?.setMethodCallHandler(nil)

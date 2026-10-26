@@ -2,6 +2,15 @@ import Cocoa
 import FlutterMacOS
 
 class MainFlutterWindow: NSWindow {
+  // AX close and direct close() do not necessarily pass through performClose.
+  override func close() {
+    if (NSApp.delegate as? AppDelegate)?.shouldHideOnClose() == true {
+      orderOut(nil)
+      return
+    }
+    super.close()
+  }
+
   override func performClose(_ sender: Any?) {
     if (NSApp.delegate as? AppDelegate)?.shouldHideOnClose() == true {
       orderOut(sender)
@@ -19,6 +28,6 @@ class MainFlutterWindow: NSWindow {
     RegisterGeneratedPlugins(registry: flutterViewController)
 
     super.awakeFromNib()
-    (NSApp.delegate as? AppDelegate)?.configureLifecycle(window: self, controller: flutterViewController)
+    // Configure lifecycle after all nib outlets (including app delegate) are wired.
   }
 }
