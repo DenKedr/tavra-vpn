@@ -9,7 +9,7 @@ Development preview общего Flutter-приложения с режимам�
 - `Preview installers (manual)` сначала вызывает эти проверки, затем собирает настоящие файлы. Workflow не создаёт GitHub Release и не подключается к внешним серверам.
 - Linux: сборка Ubuntu 22.04 amd64; DEB install/remove, синтаксис systemd, отказ запуска без конфигурации — в одноразовых Ubuntu 22.04/24.04/26.04 контейнерах. Это не полноценный тест systemd boot/VPN. arm64 DEB ещё не проверен и не публикуется workflow.
 - Windows 2022: Release Flutter, unsigned Inno Setup EXE, silent install/uninstall smoke. Интерактивный UI и Windows 10 требуют отдельной проверки.
-- macOS 14: Flutter/Xcode Release, ad-hoc подпись приложения, unsigned PKG/DMG. Это не Developer ID/notarization. Архитектура runner в `BUILD-INPUTS.json`; universal binary/macOS 13 не подтверждены. Gatekeeper может запретить открытие; не отключать защиту глобально.
+- macOS 15 с явным Xcode 16.4 / Swift 6.1: Flutter/Xcode Release, ad-hoc подпись приложения, unsigned PKG/DMG. Это не Developer ID/notarization. Архитектура runner в `BUILD-INPUTS.json`; universal binary/macOS 13 не подтверждены. Gatekeeper может запретить открытие; не отключать защиту глобально.
 - Android: arm64 debug APK с development key runner, проверка ZIP и подписи APK; fingerprint в `ANDROID-SIGNER.txt`. Не production signing. Device/emulator install и реальный VPN — отдельные gates.
 
 ## Получение артефактов
