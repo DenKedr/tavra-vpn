@@ -1,0 +1,132 @@
+id,feature,area,priority,original,clone,notes
+F001,Обзор сети и серверов,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F002,SSH пароль и логин,Администратор,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F003,SSH private key и passphrase,Администратор,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F004,SSH user certificate,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F005,Проверка и закрепление host key,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F006,Read-only обследование перед установкой,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F007,План изменений и откат установки,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F008,Установка control plane на сервер,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F009,Установка агента ноды,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F010,Возобновление прерванной установки,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F011,Добавление и редактирование серверов,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F012,Добавление и удаление нод,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F013,Удаление ПО ноды с сервера,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F014,Drain активных сессий,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F015,Группы нод,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F016,Домены: добавление редактирование удаление,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F017,Проверка DNS и сертификатов,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F018,Отключение профилей с отсутствующими prerequisites,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F019,Работа по IP без отключения TLS trust,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F020,WARP egress,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F021,Цепочка Entry→Exit,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F022,Nested tunnel с защитой от Entry,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F023,Балансировка и sticky assignment,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F024,Статистика пользователей,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F025,Мониторинг CPU RAM диска и сети,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F026,Проверка управляемых TCP UDP портов,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F027,Protocol-level health probe,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F028,Антенны свободной ёмкости и загрузка,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F029,Красный жёлтый зелёный серый статусы,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F030,Device↔node speedtest,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F031,Node↔test endpoint speedtest,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F032,Push Android macOS Windows,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F033,Независимый наблюдатель отказа primary,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F034,Создание пользователя: имя фамилия телефон email,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F035,Выпуск кода ссылки QR подписки,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F036,Срок подписки: 0 бессрочно,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F037,Лимит зарегистрированных устройств: 0 неограниченно,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F038,Атомарная регистрация устройств,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F039,Индивидуальные credentials и leases,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F040,Блокировка пользователя и прекращение сессий,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F041,Удаление пользователя и отзыв доступа,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F042,Отзыв и перевыпуск подписки,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F043,Pairing второго Admin-устройства,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F044,Роли owner operator viewer,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F045,Отзыв админского устройства и recovery,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F046,Смена главного сервера и fencing,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F047,Резервное копирование и проверка восстановления,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F048,Audit событий без секретов,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F049,Встроенное VPN подключение в Admin,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F050,Импорт подписки код ссылка QR файл,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F051,Выбор сервера и Auto,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F052,Выбор протокола и Auto,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F053,Подключение отключение переподключение,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F054,Реальный TUN IPv4 IPv6,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F055,Kill switch без утечек при сбое,Клиент,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F056,DNS без утечек,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F057,Весь трафик через VPN,Клиент,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F058,Только выбранные приложения Windows,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F059,Все кроме выбранных Windows,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F060,Только выбранные приложения macOS,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F061,Все кроме выбранных macOS,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F062,Только выбранные приложения Android,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F063,Все кроме выбранных Android,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F064,Split по сайтам доменам IP,Клиент,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F065,Доступность сервера и протокола отдельно,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F066,Личная статистика,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F067,Срок и статус подписки,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F068,Список и отзыв своих устройств,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F069,Автоподключение и смена Wi-Fi mobile,Клиент,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F070,Диагностика с редактированием секретов,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F071,Экспорт raw config с указанными ограничениями,Клиент,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F072,Резервная копия настроек,Клиент,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F073,Доверенное обновление приложения,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F074,Тёмная светлая темы и доступность,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F075,Собственное управляющее TAVRA Core,Протоколы,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F076,Собственный TAVRA Link QUIC DATAGRAM,Протоколы,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F077,TAVRA Link TLS TCP fallback,Протоколы,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F078,TAVRA Link в camouflage оболочке,Протоколы,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F079,TAVRA Link auth replay fuzz DoS tests,Протоколы,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F080,AmneziaWG Legacy,Протоколы,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F081,AmneziaWG 2,Протоколы,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F082,WireGuard,Протоколы,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F083,OpenVPN,Протоколы,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F084,OpenVPN через Cloak,Протоколы,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F085,OpenVPN через Shadowsocks,Протоколы,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F086,IKEv2,Протоколы,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F087,Xray и SSXray,Протоколы,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F088,NaïveProxy,Протоколы,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F089,Hysteria2 по референсу Blitz,Протоколы,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F090,TrustTunnel,Протоколы,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F091,Shadowsocks,Протоколы,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F092,dnstt с DNS delegation,Протоколы,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F093,DNS service,Сервисы оригинала,should,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F094,SOCKS5 service,Сервисы оригинала,should,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F095,MTProxy и Telemt,Сервисы оригинала,should,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F096,TProxy service,Сервисы оригинала,should,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F097,SFTP service,Сервисы оригинала,should,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F098,Tor website service,Сервисы оригинала,should,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F099,Расширенные AWG OpenVPN WireGuard configs,Сервисы оригинала,should,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F100,Расширенные Xray flow transport security snapshots,Сервисы оригинала,should,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F101,Sharing full access отдельно от client profile,Сервисы оригинала,should,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F102,Remnawave provider: inventory users expiry stats import,Интеграции,should,requested extension,no,API scope уточнён в design §6; unsupported операции не имитируются
+F103,Hiddify provider: inventory users expiry stats import,Интеграции,should,requested extension,no,API scope уточнён в design §6; unsupported операции не имитируются
+F104,3X-UI provider: inventory users expiry stats import,Интеграции,should,requested extension,no,API scope уточнён в design §6; unsupported операции не имитируются
+F105,Provider mutation только delegated resources,Интеграции,should,requested extension,no,API scope уточнён в design §6; unsupported операции не имитируются
+F106,Единый владелец config без конфликтов панелей,Интеграции,should,requested extension,no,API scope уточнён в design §6; unsupported операции не имитируются
+F107,Camouflage TLS HTTP fingerprint profile,DPI,must,requested extension,no,Региональная проверка требует измерений из соответствующей сети; гарантия невидимости не заявляется
+F108,Защита от active probing на своих endpoints,DPI,must,requested extension,no,Региональная проверка требует измерений из соответствующей сети; гарантия невидимости не заявляется
+F109,Рабочий TCP transport при UDP QUIC block,DPI,must,requested extension,no,Региональная проверка требует измерений из соответствующей сети; гарантия невидимости не заявляется
+F110,Обнаружение IP SNI DNS transport отказов,DPI,must,requested extension,no,Региональная проверка требует измерений из соответствующей сети; гарантия невидимости не заявляется
+F111,Bounded fallback без direct plaintext downgrade,DPI,must,requested extension,no,Региональная проверка требует измерений из соответствующей сети; гарантия невидимости не заявляется
+F112,Контролируемое обновление fingerprint-sensitive engines,DPI,must,requested extension,no,Региональная проверка требует измерений из соответствующей сети; гарантия невидимости не заявляется
+F113,Лабораторный DPI и traffic-shape тест,DPI,must,requested extension,no,Региональная проверка требует измерений из соответствующей сети; гарантия невидимости не заявляется
+F114,Приёмка из сетей России,DPI,must,requested extension,no,Региональная проверка требует измерений из соответствующей сети; гарантия невидимости не заявляется
+F115,Приёмка из сетей Китая,DPI,must,requested extension,no,Региональная проверка требует измерений из соответствующей сети; гарантия невидимости не заявляется
+F116,Приёмка из сетей Ирана,DPI,must,requested extension,no,Региональная проверка требует измерений из соответствующей сети; гарантия невидимости не заявляется
+F117,Приёмка из сетей ОАЭ,DPI,must,requested extension,no,Региональная проверка требует измерений из соответствующей сети; гарантия невидимости не заявляется
+F118,Отметки operator date last successful profile,DPI,must,requested extension,no,Региональная проверка требует измерений из соответствующей сети; гарантия невидимости не заявляется
+F119,GitHub исходники и релизы,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F120,Windows Client EXE,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F121,Windows Admin EXE,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F122,macOS Client arm64 x64 PKG DMG,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F123,macOS Admin arm64 x64 PKG DMG,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F124,Android Client APK,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F125,Android Admin APK,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F126,Ubuntu22 amd64 arm64 DEB,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F127,Ubuntu24 amd64 arm64 DEB,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F128,Ubuntu26 amd64 arm64 DEB,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F129,Platform signing и доверие обновлений,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F130,Install upgrade uninstall smoke,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F131,SBOM лицензии third-party notices checksums,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены

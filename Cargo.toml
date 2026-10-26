@@ -1,0 +1,15 @@
+[workspace]
+resolver = "2"
+members = ["crates/tavra-core", "crates/tavra-control", "crates/tavra-link"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+
+[profile.release]
+lto = "thin"
+strip = "symbols"
+
+[profile.dev]
+debug = 1
