@@ -1,0 +1,141 @@
+name: Preview installers (manual)
+# Produces CI artifacts only. Repository/release publication is a separate explicit action.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  checks:
+    uses: ./.github/workflows/ci.yml
+  linux:
+    needs: checks
+    runs-on: ubuntu-22.04
+    timeout-minutes: 40
+    env:
+      CARGO_BUILD_JOBS: '2'
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - run: rustup toolchain install 1.99.1 --profile minimal && rustup default 1.99.1
+      - run: cargo build --release --locked -p tavra-control -p tavra-node -p tavra-link-cli
+      - name: Own Link Linux test runtime
+        run: |
+          mkdir -p dist
+          tar -czf dist/TAVRA-Preview-Link-Linux-amd64.tar.gz -C target/release tavra-link-cli issue-test-lease
+      - name: DEB and three Ubuntu installation gates
+        run: |
+          scripts/release-build-deb.sh control
+          scripts/release-build-deb.sh node
+          scripts/release-verify-deb.sh --containers
+      - name: Source and dependency inventory
+        run: |
+          git archive --format=tar.gz --prefix=TAVRA-Preview/ HEAD > dist/TAVRA-Preview-source.tar.gz
+          python3 scripts/release-provenance.py
+          python3 scripts/release-manifest.py
+          cd dist && sha256sum -c SHA256SUMS
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: TAVRA-Preview-Linux-amd64-source
+          path: dist/
+          if-no-files-found: error
+  desktop-mobile:
+    needs: checks
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows
+            os: windows-2022
+          - platform: macos
+            os: macos-14
+          - platform: android
+            os: ubuntu-22.04
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+        with:
+          flutter-version: '3.47.8'
+          channel: stable
+          cache: false
+      - run: flutter pub get --enforce-lockfile
+        working-directory: apps/tavra
+      - run: flutter analyze && flutter test
+        working-directory: apps/tavra
+      - name: Windows build
+        if: matrix.platform == 'windows'
+        working-directory: apps/tavra
+        run: flutter build windows --release
+      - name: Windows EXE installer
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        run: |
+          choco install innosetup --yes --no-progress
+          if ($LASTEXITCODE -ne 0) { throw 'Inno Setup installation failed' }
+          & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" packaging/windows/tavra-preview.iss
+          if ($LASTEXITCODE -ne 0) { throw 'Inno Setup compile failed' }
+          $installer = (Get-ChildItem dist/*Setup.exe).FullName
+          $p = Start-Process $installer -ArgumentList '/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART' -Wait -PassThru
+          if ($p.ExitCode -ne 0) { throw 'Install smoke failed' }
+          $app = "$env:LOCALAPPDATA\Programs\TAVRA-Preview\tavra.exe"
+          if (!(Test-Path $app)) { throw 'Installed executable missing' }
+          $p = Start-Process "$env:LOCALAPPDATA\Programs\TAVRA-Preview\unins000.exe" -ArgumentList '/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART' -Wait -PassThru
+          if ($p.ExitCode -ne 0) { throw 'Uninstall smoke failed' }
+      - name: macOS build and unsigned installers
+        if: matrix.platform == 'macos'
+        shell: bash
+        run: |
+          cd apps/tavra
+          flutter build macos --release --config-only
+          xcodebuild -workspace macos/Runner.xcworkspace -scheme Runner -configuration Release -derivedDataPath build/preview CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="" build
+          cd ../..
+          mkdir -p dist
+          app=apps/tavra/build/preview/Build/Products/Release/TAVRA.app
+          codesign --force --deep --sign - --entitlements apps/tavra/macos/Runner/Release.entitlements "$app"
+          codesign --verify --deep --strict "$app"
+          pkgbuild --component "$app" --install-location /Applications --identifier dev.tavra.preview --version 0.1.0 dist/TAVRA-Preview-macOS-unsigned.pkg
+          hdiutil create -volname TAVRA-Preview -srcfolder "$app" -ov -format UDZO dist/TAVRA-Preview-macOS-adhoc.dmg
+          pkgutil --expand dist/TAVRA-Preview-macOS-unsigned.pkg "$RUNNER_TEMP/tavra-pkg-expanded"
+          hdiutil verify dist/TAVRA-Preview-macOS-adhoc.dmg
+      - name: Android development APK
+        if: matrix.platform == 'android'
+        shell: bash
+        run: |
+          export JAVA_HOME="$JAVA_HOME_17_X64"
+          export PATH="$JAVA_HOME/bin:$PATH"
+          cd apps/tavra
+          flutter build apk --debug --target-platform android-arm64
+          cd ../..
+          mkdir -p dist
+          cp apps/tavra/build/app/outputs/flutter-apk/app-debug.apk dist/TAVRA-Preview-Android-arm64-development.apk
+          unzip -t dist/TAVRA-Preview-Android-arm64-development.apk
+          tools=$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)
+          "$tools/apksigner" verify --verbose --print-certs dist/TAVRA-Preview-Android-arm64-development.apk > dist/ANDROID-SIGNER.txt
+      - name: Record exact build inputs
+        shell: python
+        run: |
+          import runpy
+          runpy.run_path("scripts/release-provenance.py", run_name="__main__")
+      - name: Artifact hashes (Unix)
+        if: matrix.platform != 'windows'
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib,pathlib
+          p=pathlib.Path('dist')
+          (p/'SHA256SUMS').write_text(''.join(f'{hashlib.sha256(f.read_bytes()).hexdigest()}  {f.name}\n' for f in sorted(p.iterdir()) if f.is_file() and f.name!='SHA256SUMS'))
+          PY
+      - name: Artifact hashes (Windows)
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        run: |
+          Get-ChildItem dist -File | Where-Object Name -ne SHA256SUMS | Sort-Object Name | ForEach-Object { "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower())  $($_.Name)" } | Set-Content dist/SHA256SUMS -Encoding ascii
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: TAVRA-Preview-${{ matrix.platform }}
+          path: dist/
+          if-no-files-found: error
