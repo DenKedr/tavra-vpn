@@ -74,3 +74,16 @@ Claims JSON keys: `device_key` (public hex32), `node_id`, `epoch`, `issued_at`
 (Unix seconds), `expires_at` (Unix seconds, at most issued_at + 900).
 Authority/device seeds should be generated from the OS CSPRNG by the test executor;
 the helper only signs provided claims, and does not enroll a production device.
+
+Forwarding expiry guard: `Admitted::forwarding_allowance()` closes expired sessions.
+The TUN writer caps its wait to the smaller of one second and remaining lease time,
+then checks permission again inside the readiness callback immediately before the
+nonblocking write syscall. A packet queued before expiry does not retain permission
+while waiting for TUN readiness. Transport regression tests simulate that delay;
+real TUN backpressure remains a separate Linux acceptance check.
+
+The 15-second idle timeout can terminate a session before a longer lease expires.
+For the dedicated idle expiry acceptance case, use a lease below 15 seconds and
+configure both interfaces promptly; alternatively keep bounded traffic running
+until expiry. Each negative handshake/admission case needs a new server process,
+since this test server accepts one incoming connection only.

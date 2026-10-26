@@ -129,7 +129,11 @@ mod tun {
             if unsafe { libc::ioctl(fd.as_raw_fd(), 0x400454ca as libc::c_ulong, &mut req) } < 0 {
                 return Err(io::Error::last_os_error().into());
             }
-            Ok(Self(tokio::io::unix::AsyncFd::register(fd)?))
+            // SAFETY: OwnedFd exclusively owns the open descriptor returned above.
+            // It is moved into AsyncFd, whose private wrapper never exposes ownership,
+            // closes/duplicates/replaces the raw fd, or changes AsRawFd's result.
+            // Thus the same open file description remains valid until AsyncFd drops.
+            Ok(Self(unsafe { tokio::io::unix::AsyncFd::register(fd)? }))
         }
         pub async fn read(&self, buf: &mut [u8]) -> io::Result<usize> {
             loop {
@@ -148,10 +152,19 @@ mod tun {
                 }
             }
         }
-        pub async fn write(&self, buf: &[u8]) -> io::Result<()> {
+        pub async fn write(
+            &self,
+            buf: &[u8],
+            session: &tavra_link::transport::Admitted,
+        ) -> io::Result<()> {
             loop {
                 let mut ready = self.0.writable().await?;
                 match ready.try_io(|fd| {
+                    // Readiness may arrive after the lease has expired. Check at the
+                    // final synchronous boundary, with no await before the syscall.
+                    session.forwarding_allowance().map_err(|_| {
+                        io::Error::new(io::ErrorKind::PermissionDenied, "lease expired")
+                    })?;
                     let n = unsafe { libc::write(fd.as_raw_fd(), buf.as_ptr().cast(), buf.len()) };
                     if n < 0 {
                         Err(io::Error::last_os_error())
@@ -256,7 +269,7 @@ async fn run(c: Config) -> Result<()> {
         _=tokio::signal::ctrl_c()=>break,
         _=term.recv()=>break,
         n=tun.read(&mut buf)=>{let n=n?;if packet_allowed(&buf[..n],c.own_ip,c.peer_ip,c.mtu){session.send_packet(&buf[..n])?;}},
-        p=session.receive_packet()=>{let p=p?;if packet_allowed(&p,c.peer_ip,c.own_ip,c.mtu){tokio::time::timeout(Duration::from_secs(1),tun.write(&p)).await??;}}
+        p=session.receive_packet()=>{let p=p?;if packet_allowed(&p,c.peer_ip,c.own_ip,c.mtu){let allowance=session.forwarding_allowance()?.min(Duration::from_secs(1));tokio::time::timeout(allowance,tun.write(&p,&session)).await??;}}
     }}Ok(())}.await;
     session.close();
     drop(tun);

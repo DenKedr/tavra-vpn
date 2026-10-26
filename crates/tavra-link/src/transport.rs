@@ -13,7 +13,7 @@ pub struct Admitted {
 }
 impl Admitted {
     pub fn send_packet(&self, packet: &[u8]) -> Result<(), LinkError> {
-        self.remaining()?;
+        self.forwarding_allowance()?;
         let data = Frame::Packet(packet.to_vec())
             .encode()
             .map_err(|_| LinkError)?;
@@ -29,21 +29,28 @@ impl Admitted {
             .map_err(|_| LinkError)
     }
     pub async fn receive_packet(&self) -> Result<Vec<u8>, LinkError> {
-        let bytes =
-            match tokio::time::timeout(self.remaining()?, self.connection.read_datagram()).await {
-                Ok(Ok(bytes)) => bytes,
-                _ => {
-                    self.close();
-                    return Err(LinkError);
-                }
-            };
-        self.remaining()?;
+        let bytes = match tokio::time::timeout(
+            self.forwarding_allowance()?,
+            self.connection.read_datagram(),
+        )
+        .await
+        {
+            Ok(Ok(bytes)) => bytes,
+            _ => {
+                self.close();
+                return Err(LinkError);
+            }
+        };
+        self.forwarding_allowance()?;
         match Frame::decode(&bytes).map_err(|_| LinkError)? {
             Frame::Packet(data) => Ok(data),
             _ => Err(LinkError),
         }
     }
-    fn remaining(&self) -> Result<Duration, LinkError> {
+    /// Remaining monotonic lifetime of this authenticated finite lease.
+    /// Call immediately before each forwarding side effect, including after waiting
+    /// for device readiness. Expiration closes QUIC and permanently denies forwarding.
+    pub fn forwarding_allowance(&self) -> Result<Duration, LinkError> {
         let d = self.deadline.saturating_duration_since(Instant::now());
         if d.is_zero() {
             self.close();

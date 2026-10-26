@@ -126,3 +126,55 @@ async fn expired_admission_never_creates_data_session() {
     client.close(0u32.into(), b"done");
     server.close(0u32.into(), b"done");
 }
+
+#[tokio::test]
+async fn packet_received_before_expiry_cannot_be_forwarded_after_readiness_delay() {
+    let (server, client) = endpoints();
+    let authority = SigningKey::from_bytes(&[3; 32]);
+    let device = SigningKey::from_bytes(&[4; 32]);
+    let lease = issue_lease(
+        &authority,
+        LeaseClaims {
+            device_key: hex::encode(device.verifying_key().as_bytes()),
+            node_id: "delayed-tun".into(),
+            epoch: 1,
+            issued_at: 100,
+            expires_at: 101,
+        },
+    )
+    .unwrap();
+    let receiving = async {
+        let conn = server.accept().await.unwrap().await.unwrap();
+        let admitted = transport::accept(conn, &authority.verifying_key(), "delayed-tun", 1, 100)
+            .await
+            .unwrap();
+        let queued_packet = admitted.receive_packet().await.unwrap();
+        assert_eq!(queued_packet, packet());
+        let remaining = admitted.forwarding_allowance().unwrap();
+        assert!(remaining <= std::time::Duration::from_secs(1));
+        // Model a TUN that becomes writable only after its queued packet's lease
+        // expires. The same final permission gate is called before libc::write.
+        tokio::time::sleep(remaining + std::time::Duration::from_millis(20)).await;
+        assert!(admitted.forwarding_allowance().is_err());
+        assert!(admitted.send_packet(&queued_packet).is_err());
+        assert!(admitted.forwarding_allowance().is_err());
+    };
+    let sending = async {
+        let conn = client
+            .connect(server.local_addr().unwrap(), "localhost")
+            .unwrap()
+            .await
+            .unwrap();
+        let admitted = transport::connect(conn, lease, &device, 100).await.unwrap();
+        admitted.send_packet(&packet()).unwrap();
+        tokio::time::sleep(std::time::Duration::from_millis(1300)).await;
+        admitted.close();
+    };
+    tokio::time::timeout(std::time::Duration::from_secs(5), async {
+        tokio::join!(receiving, sending);
+    })
+    .await
+    .unwrap();
+    client.close(0u32.into(), b"done");
+    server.close(0u32.into(), b"done");
+}
