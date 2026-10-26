@@ -1,4 +1,5 @@
 import 'policy.dart';
+import 'dialog_fields.dart';
 export 'policy.dart';
 import 'package:flutter/material.dart';
 import 'api.dart';
@@ -104,70 +105,71 @@ class _SettingsViewState extends State<SettingsView> {
     bool network = false,
     bool filter = false,
   }) async {
-    final controller = TextEditingController();
     final form = GlobalKey<FormState>();
     String? normalized;
     final result = await showDialog<String>(
       context: context,
-      builder: (c) => AlertDialog(
-        title: Text(
-          network
-              ? 'Исключение IP / подсети'
-              : filter
-              ? 'URL списка фильтров'
-              : 'Правило сайта',
-        ),
-        content: SizedBox(
-          width: 440,
-          child: Form(
-            key: form,
-            child: TextFormField(
-              controller: controller,
-              autofocus: true,
-              decoration: InputDecoration(
-                labelText: network
-                    ? 'IPv4, IPv6 или CIDR'
-                    : filter
-                    ? 'HTTPS URL'
-                    : 'Домен или HTTP(S) URL',
-              ),
-              validator: (v) {
-                try {
-                  if (network) {
-                    if (!validNetwork(v ?? ''))
-                      return 'Некорректный IP или CIDR префикс';
-                    normalized = v!.trim();
-                  } else if (filter) {
-                    if (!validEncryptedUrl(v ?? '', filter: true))
-                      return 'Нужен HTTPS URL без пароля, query, fragment, порта 0; до 2048 байт';
-                    normalized = v;
-                  } else {
-                    normalized = normalizeSite(v ?? '');
+      builder: (_) => DialogFields(
+        initialValues: const {'value': ''},
+        builder: (c, controllers) => AlertDialog(
+          title: Text(
+            network
+                ? 'Исключение IP / подсети'
+                : filter
+                ? 'URL списка фильтров'
+                : 'Правило сайта',
+          ),
+          content: SizedBox(
+            width: 440,
+            child: Form(
+              key: form,
+              child: TextFormField(
+                controller: controllers['value'],
+                autofocus: true,
+                decoration: InputDecoration(
+                  labelText: network
+                      ? 'IPv4, IPv6 или CIDR'
+                      : filter
+                      ? 'HTTPS URL'
+                      : 'Домен или HTTP(S) URL',
+                ),
+                validator: (v) {
+                  try {
+                    if (network) {
+                      if (!validNetwork(v ?? ''))
+                        return 'Некорректный IP или CIDR префикс';
+                      normalized = v!.trim();
+                    } else if (filter) {
+                      if (!validEncryptedUrl(v ?? '', filter: true))
+                        return 'Нужен HTTPS URL без пароля, query, fragment, порта 0; до 2048 байт';
+                      normalized = v;
+                    } else {
+                      normalized = normalizeSite(v ?? '');
+                    }
+                    return null;
+                  } on FormatException catch (e) {
+                    return e.message;
                   }
-                  return null;
-                } on FormatException catch (e) {
-                  return e.message;
-                }
-              },
+                },
+              ),
             ),
           ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(c),
+              child: const Text('Отмена'),
+            ),
+            FilledButton(
+              onPressed: () {
+                if (form.currentState!.validate()) Navigator.pop(c, normalized);
+              },
+              child: const Text('Добавить'),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(c),
-            child: const Text('Отмена'),
-          ),
-          FilledButton(
-            onPressed: () {
-              if (form.currentState!.validate()) Navigator.pop(c, normalized);
-            },
-            child: const Text('Добавить'),
-          ),
-        ],
       ),
     );
-    controller.dispose();
-    if (result == null) return;
+    if (result == null || !mounted) return;
     final routing = ['excluded_sites', 'excluded_networks'].contains(field);
     final list = List<String>.from(
       routing ? config[field] ?? [] : protection[field] ?? [],

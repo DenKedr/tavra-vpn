@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'api.dart';
 import 'settings.dart';
+import 'dialog_fields.dart';
 
 const navy = Color(0xff071a3b),
     ivory = Color(0xfff4eddc),
@@ -323,143 +324,142 @@ class _WorkspaceState extends State<Workspace> {
             'expires_at': 'Истекает: Unix секунды (0 — бессрочно)',
             'device_limit': 'Лимит устройств (0 — без лимита)',
           };
-    final controllers = {
+    final initialValues = {
       for (final entry in fields.entries)
-        entry.key: TextEditingController(
-          text:
-              row?[entry.key]?.toString() ??
-              (entry.key == 'ssh_port'
-                  ? '22'
-                  : entry.key == 'username'
-                  ? 'root'
-                  : ['expires_at', 'device_limit'].contains(entry.key)
-                  ? '0'
-                  : ''),
-        ),
+        entry.key:
+            row?[entry.key]?.toString() ??
+            (entry.key == 'ssh_port'
+                ? '22'
+                : entry.key == 'username'
+                ? 'root'
+                : ['expires_at', 'device_limit'].contains(entry.key)
+                ? '0'
+                : ''),
     };
     final dialogForm = GlobalKey<FormState>();
     final result = await showDialog<Map<String, dynamic>>(
       context: context,
-      builder: (c) => AlertDialog(
-        title: Text(
-          row == null
-              ? 'Добавить ${kind == 'server'
-                    ? 'сервер'
-                    : kind == 'user'
-                    ? 'пользователя'
-                    : 'подписку'}'
-              : 'Изменить пользователя',
-        ),
-        content: SizedBox(
-          width: 500,
-          child: SingleChildScrollView(
-            child: Form(
-              key: dialogForm,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (kind == 'server')
-                    const Padding(
-                      padding: EdgeInsets.only(bottom: 16),
-                      child: Text(
-                        'Сохраняется только запись. SSH-подключение и установка не запускаются.',
+      builder: (_) => DialogFields(
+        initialValues: initialValues,
+        builder: (c, controllers) => AlertDialog(
+          title: Text(
+            row == null
+                ? 'Добавить ${kind == 'server'
+                      ? 'сервер'
+                      : kind == 'user'
+                      ? 'пользователя'
+                      : 'подписку'}'
+                : 'Изменить пользователя',
+          ),
+          content: SizedBox(
+            width: 500,
+            child: SingleChildScrollView(
+              child: Form(
+                key: dialogForm,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (kind == 'server')
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 16),
+                        child: Text(
+                          'Сохраняется только запись. SSH-подключение и установка не запускаются.',
+                        ),
                       ),
-                    ),
-                  ...fields.entries.map(
-                    (e) => Padding(
-                      padding: const EdgeInsets.only(bottom: 14),
-                      child: TextFormField(
-                        style: const TextStyle(color: ivory),
-                        controller: controllers[e.key],
-                        decoration: InputDecoration(labelText: e.value),
-                        keyboardType:
-                            [
+                    ...fields.entries.map(
+                      (e) => Padding(
+                        padding: const EdgeInsets.only(bottom: 14),
+                        child: TextFormField(
+                          style: const TextStyle(color: ivory),
+                          controller: controllers[e.key],
+                          decoration: InputDecoration(labelText: e.value),
+                          keyboardType:
+                              [
+                                'ssh_port',
+                                'expires_at',
+                                'device_limit',
+                              ].contains(e.key)
+                              ? TextInputType.number
+                              : TextInputType.text,
+                          validator: (v) {
+                            v = v ?? '';
+                            if ([
                               'ssh_port',
                               'expires_at',
                               'device_limit',
-                            ].contains(e.key)
-                            ? TextInputType.number
-                            : TextInputType.text,
-                        validator: (v) {
-                          v = v ?? '';
-                          if ([
-                            'ssh_port',
-                            'expires_at',
-                            'device_limit',
-                          ].contains(e.key)) {
-                            final n = int.tryParse(v);
-                            if (n == null ||
-                                n < 0 ||
-                                (e.key == 'ssh_port' && (n < 1 || n > 65535)) ||
-                                (e.key == 'device_limit' && n > 1000000))
-                              return 'Укажите допустимое целое число';
-                          } else if (kind == 'server') {
-                            if (v.trim().isEmpty) return 'Заполните поле';
-                            if (e.key == 'name' && v.runes.length > 120)
-                              return 'Максимум 120 символов';
-                            if (e.key == 'host' &&
-                                (!RegExp(
-                                      r'^[a-zA-Z0-9.\-:\[\]]+$',
-                                    ).hasMatch(v) ||
-                                    v.length > 253))
-                              return 'Укажите IP или имя хоста';
-                            if (e.key == 'username' &&
-                                (!RegExp(r'^[a-zA-Z0-9_-]+$').hasMatch(v) ||
-                                    v.length > 64))
-                              return 'Неверное имя SSH пользователя';
-                          } else if (e.key == 'user_id' &&
-                              !RegExp(
-                                r'^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$',
-                              ).hasMatch(v))
-                            return 'Укажите UUID пользователя';
-                          else if (kind == 'user' &&
-                              (v.runes.length >
-                                      (e.key == 'email'
-                                          ? 254
-                                          : e.key == 'phone'
-                                          ? 64
-                                          : 120) ||
-                                  RegExp(r'[\x00-\x1f\x7f]').hasMatch(v)))
-                            return 'Поле превышает лимит или содержит управляющие символы';
-                          return null;
-                        },
+                            ].contains(e.key)) {
+                              final n = int.tryParse(v);
+                              if (n == null ||
+                                  n < 0 ||
+                                  (e.key == 'ssh_port' &&
+                                      (n < 1 || n > 65535)) ||
+                                  (e.key == 'device_limit' && n > 1000000))
+                                return 'Укажите допустимое целое число';
+                            } else if (kind == 'server') {
+                              if (v.trim().isEmpty) return 'Заполните поле';
+                              if (e.key == 'name' && v.runes.length > 120)
+                                return 'Максимум 120 символов';
+                              if (e.key == 'host' &&
+                                  (!RegExp(
+                                        r'^[a-zA-Z0-9.\-:\[\]]+$',
+                                      ).hasMatch(v) ||
+                                      v.length > 253))
+                                return 'Укажите IP или имя хоста';
+                              if (e.key == 'username' &&
+                                  (!RegExp(r'^[a-zA-Z0-9_-]+$').hasMatch(v) ||
+                                      v.length > 64))
+                                return 'Неверное имя SSH пользователя';
+                            } else if (e.key == 'user_id' &&
+                                !RegExp(
+                                  r'^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$',
+                                ).hasMatch(v))
+                              return 'Укажите UUID пользователя';
+                            else if (kind == 'user' &&
+                                (v.runes.length >
+                                        (e.key == 'email'
+                                            ? 254
+                                            : e.key == 'phone'
+                                            ? 64
+                                            : 120) ||
+                                    RegExp(r'[\x00-\x1f\x7f]').hasMatch(v)))
+                              return 'Поле превышает лимит или содержит управляющие символы';
+                            return null;
+                          },
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(c),
+              child: const Text('Отмена'),
+            ),
+            FilledButton(
+              onPressed: () {
+                if (dialogForm.currentState!.validate())
+                  Navigator.pop(c, {
+                    for (final e in controllers.entries)
+                      e.key:
+                          [
+                            'ssh_port',
+                            'expires_at',
+                            'device_limit',
+                          ].contains(e.key)
+                          ? int.parse(e.value.text)
+                          : e.value.text.trim(),
+                  });
+              },
+              child: const Text('Сохранить'),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(c),
-            child: const Text('Отмена'),
-          ),
-          FilledButton(
-            onPressed: () {
-              if (dialogForm.currentState!.validate())
-                Navigator.pop(c, {
-                  for (final e in controllers.entries)
-                    e.key:
-                        [
-                          'ssh_port',
-                          'expires_at',
-                          'device_limit',
-                        ].contains(e.key)
-                        ? int.parse(e.value.text)
-                        : e.value.text.trim(),
-                });
-            },
-            child: const Text('Сохранить'),
-          ),
-        ],
       ),
     );
-    for (final c in controllers.values) {
-      c.dispose();
-    }
-    if (result != null)
+    if (result != null && mounted)
       await mutate(
         row == null ? 'POST' : 'PATCH',
         kind == 'server'
