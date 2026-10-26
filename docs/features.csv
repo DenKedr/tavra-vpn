@@ -130,3 +130,28 @@ F128,Ubuntu26 amd64 arm64 DEB,Выпуск,must,requested extension,no,Целе�
 F129,Platform signing и доверие обновлений,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F130,Install upgrade uninstall smoke,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F131,SBOM лицензии third-party notices checksums,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F132,LAN bypass IPv4 IPv6,Маршрутизация,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F133,Исключения сайтов с IDNA и границей домена,Маршрутизация,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F134,Исключения IPv4 IPv6 адресов и CIDR подсетей,Маршрутизация,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F135,Локальное сохранение настроек устройства,Маршрутизация,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F136,Фоновая работа при закрытии окна macOS,Фоновая работа,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F137,Фоновая работа при закрытии окна Windows,Фоновая работа,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F138,Android foreground VPN при закрытом UI,Фоновая работа,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F139,Tray menu reopen и отдельный выход,Фоновая работа,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F140,Запуск приложения при входе в ОС по настройке,Фоновая работа,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F141,TAVRA Shield блокировка рекламы DNS,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F142,Блокировка трекеров DNS,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F143,Защита от фишинговых вредоносных доменов,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F144,Фильтры раздражителей cookie popup,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F145,DNS DoH DoT QUIC upstream,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F146,Списки фильтров версии обновления rollback,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F147,Пользовательские allow block правила,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F148,Счётчики реально заблокированных запросов,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F149,Локальный отключаемый журнал запросов retention,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F150,Per-app и per-site исключения фильтрации,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F151,Временная пауза фильтрации,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F152,Родительский контроль safe search категории,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F153,Browser cosmetic filtering element picker,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F154,Опциональная HTTPS content filtering с согласием,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F155,Единый Android service VPN и фильтрация,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F156,TrustTunnel подпись протокол AdGuard VPN,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance

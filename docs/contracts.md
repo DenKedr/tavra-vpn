@@ -3,7 +3,7 @@
 All JSON keys snake_case; times integer Unix seconds; identifiers UUID strings. Development API binds loopback by default. HTTP errors `{ "error": { "code": "...", "message": "..." } }`; no tokens/credentials in error bodies. Admin routes require `Authorization: Bearer <session>`.
 
 - GET /v1/health -> `{status,version,storage}`.
-- POST /v1/admin/bootstrap `{bootstrap_secret}` -> `{token,expires_at}`; one-use owner activation. POST /v1/admin/session `{bootstrap_secret}` only development recovery credential flow if explicitly provided and limited; must not re-enable bootstrap after activation.
+- POST /v1/admin/bootstrap `{bootstrap_secret,admin_secret}` -> `{token,expires_at}`; one-use owner activation. `admin_secret` is a locally generated high-entropy administrator key (not a short password), its hash persists; POST /v1/admin/session `{admin_secret}` authenticates after restart without re-enabling bootstrap. Random 256-bit sessions expire after 8h.
 - GET/POST /v1/users; user fields `{id,first_name,last_name,phone,email,status,created_at}`. PATCH/DELETE /v1/users/{id}; mutations require admin. Contact fields may be empty, names cannot exceed 120 chars, email max254/phone max64.
 - GET/POST /v1/subscriptions; create `{user_id,expires_at,device_limit}` where expiry0=unlimited, limit0=unlimited. Response subscription has `{id,user_id,status,expires_at,device_limit,created_at}`; invitation returned only on creation/rotate.
 - POST /v1/subscriptions/{id}/revoke and /rotate; revoke stops enrolment and invalidates credentials.

@@ -1,0 +1,3 @@
+ALTER TABLE security_clock ADD COLUMN generation BIGINT NOT NULL DEFAULT 0 CHECK(generation >= 0);
+ALTER TABLE sessions ADD COLUMN generation BIGINT NOT NULL DEFAULT 0;
+ALTER TABLE challenges ADD COLUMN generation BIGINT NOT NULL DEFAULT 0;

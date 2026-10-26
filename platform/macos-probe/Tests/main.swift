@@ -1,0 +1,20 @@
+import Foundation
+func check(_ value: Bool, _ message: String) { if !value { fatalError(message) } }
+let selected = try Policy(mode: .onlySelected, signingIDs: ["org.example.browser", "org.example.browser.helper"])
+check(selected.decision(signingID: "org.example.browser") == .protect, "selected")
+check(selected.decision(signingID: "org.example.browser.helper") == .protect, "explicit helper")
+check(selected.decision(signingID: "org.example.browser.other") == .direct, "no prefix match")
+check(selected.decision(signingID: nil) == .block, "unknown identity fails closed")
+let except = try Policy(mode: .allExceptSelected, signingIDs: ["org.example.browser"])
+check(except.decision(signingID: "org.example.browser") == .direct, "excluded")
+check(except.decision(signingID: "org.example.other") == .protect, "remaining protected")
+check(except.decision(signingID: "") == .block, "empty identity")
+check(try Policy(mode: .onlySelected, signingIDs: []).decision(signingID: "app") == .direct, "empty include")
+check(try Policy(mode: .allExceptSelected, signingIDs: []).decision(signingID: "app") == .protect, "empty exclude")
+do { _ = try Policy(mode: .onlySelected, signingIDs: [" "]); fatalError("invalid accepted") } catch PolicyError.invalidIdentity {}
+let settings = makeCandidateSettings()
+check(settings.includedNetworkRules?.count == 2, "candidate TCP UDP rules")
+check(settings.excludedNetworkRules?.isEmpty == true, "no destination bypass")
+let config = makePacketConfiguration()
+check(config.providerBundleIdentifier == "org.example.tavra.packet", "provider ID")
+print("PASS: 13 policy/settings/config assertions; no preferences saved or VPN started")

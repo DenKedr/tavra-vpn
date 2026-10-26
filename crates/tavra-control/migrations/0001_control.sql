@@ -1,0 +1,10 @@
+CREATE TABLE admins (singleton BOOLEAN PRIMARY KEY DEFAULT true CHECK (singleton), credential_hash BYTEA NOT NULL);
+CREATE TABLE sessions (token_hash BYTEA PRIMARY KEY, expires_at BIGINT NOT NULL);
+CREATE TABLE users (id UUID PRIMARY KEY, first_name TEXT NOT NULL, last_name TEXT NOT NULL, phone TEXT NOT NULL, email TEXT NOT NULL, status TEXT NOT NULL CHECK(status IN ('active','blocked')), created_at BIGINT NOT NULL);
+CREATE TABLE subscriptions (id UUID PRIMARY KEY, user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE, status TEXT NOT NULL CHECK(status IN ('active','blocked','revoked')), expires_at BIGINT NOT NULL CHECK(expires_at >= 0), device_limit BIGINT NOT NULL CHECK(device_limit >= 0 AND device_limit <= 1000000), invitation_hash BYTEA UNIQUE, created_at BIGINT NOT NULL);
+CREATE TABLE challenges (id UUID PRIMARY KEY, subscription_id UUID NOT NULL REFERENCES subscriptions(id) ON DELETE CASCADE, public_key TEXT NOT NULL, nonce TEXT NOT NULL, expires_at BIGINT NOT NULL, consumed BOOLEAN NOT NULL DEFAULT false);
+CREATE TABLE devices (id UUID PRIMARY KEY, subscription_id UUID NOT NULL REFERENCES subscriptions(id) ON DELETE CASCADE, public_key TEXT NOT NULL, status TEXT NOT NULL CHECK(status IN ('active','revoked')), created_at BIGINT NOT NULL, UNIQUE(subscription_id, public_key));
+CREATE TABLE servers (id UUID PRIMARY KEY, name TEXT NOT NULL, host TEXT NOT NULL, ssh_port INTEGER NOT NULL CHECK(ssh_port BETWEEN 1 AND 65535), username TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'not_provisioned', created_at BIGINT NOT NULL);
+CREATE INDEX devices_subscription ON devices(subscription_id);
+CREATE INDEX challenges_expiry ON challenges(expires_at);
+CREATE INDEX sessions_expiry ON sessions(expires_at);

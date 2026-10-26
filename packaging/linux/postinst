@@ -1,0 +1,14 @@
+#!/bin/sh
+set -eu
+case "${1:-}" in
+ configure)
+  getent group tavra >/dev/null || addgroup --system tavra
+  id -u tavra >/dev/null 2>&1 || adduser --system --ingroup tavra --no-create-home --home /var/lib/tavra --disabled-login tavra
+  install -d -o tavra -g tavra -m 0750 /var/lib/tavra
+  if [ -d /run/systemd/system ]; then
+   systemd-analyze verify /lib/systemd/system/tavra-@COMPONENT@.service
+   systemctl daemon-reload
+  fi
+  echo 'TAVRA preview installed but not enabled or started. Configure /etc/tavra first.'
+ ;;
+esac

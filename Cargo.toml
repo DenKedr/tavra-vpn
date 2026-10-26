@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/tavra-core", "crates/tavra-control", "crates/tavra-link"]
+members = ["crates/tavra-core", "crates/tavra-control", "crates/tavra-link", "crates/tavra-shield", "crates/tavra-node", "crates/tavra-link-cli"]
 
 [workspace.package]
 version = "0.1.0"

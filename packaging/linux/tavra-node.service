@@ -1,0 +1,23 @@
+[Unit]
+Description=TAVRA node development preview
+After=network.target
+ConditionPathExists=/etc/tavra/node.json
+
+[Service]
+Type=simple
+User=tavra
+Group=tavra
+ExecStartPre=/opt/tavra/bin/tavra-node check-config --config /etc/tavra/node.json
+ExecStart=/opt/tavra/bin/tavra-node --config /etc/tavra/node.json
+WorkingDirectory=/var/lib/tavra
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/tavra
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

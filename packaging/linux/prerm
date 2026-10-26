@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+case "${1:-}" in remove|deconfigure)
+ if [ -d /run/systemd/system ]; then
+  systemctl stop tavra-@COMPONENT@.service
+  systemctl disable tavra-@COMPONENT@.service
+ fi
+ ;; esac

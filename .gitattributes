@@ -1,0 +1,8 @@
+*.csv text eol=lf
+*.rs text eol=lf
+*.dart text eol=lf
+*.sh text eol=lf
+*.py text eol=lf
+*.yml text eol=lf
+*.png binary
+*.ico binary

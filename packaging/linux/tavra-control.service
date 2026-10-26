@@ -1,0 +1,23 @@
+[Unit]
+Description=TAVRA control development preview
+After=network.target
+ConditionPathExists=/etc/tavra/control.env
+
+[Service]
+Type=simple
+User=tavra
+Group=tavra
+EnvironmentFile=/etc/tavra/control.env
+ExecStart=/opt/tavra/bin/tavra-control
+WorkingDirectory=/var/lib/tavra
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/tavra
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

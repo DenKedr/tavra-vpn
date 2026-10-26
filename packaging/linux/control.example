@@ -1,0 +1,7 @@
+# Copy to /etc/tavra/control.env; chown root:tavra; chmod 0640.
+# Supply a dedicated PostgreSQL database and a non-superuser database owner.
+TAVRA_DATABASE_URL=postgresql://REPLACE_USER:REPLACE_PASSWORD@127.0.0.1/tavra
+TAVRA_BIND=127.0.0.1:8787
+# Set a freshly generated >=32-byte secret only when bootstrapping the first admin.
+# Remove bootstrap secret after initial setup.
+TAVRA_BOOTSTRAP_SECRET=

@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+if [ -d /run/systemd/system ]; then systemctl daemon-reload; fi
+# Keep operator config, certificates, database and /var/lib/tavra even on purge.
