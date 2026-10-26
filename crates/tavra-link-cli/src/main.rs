@@ -129,7 +129,7 @@ mod tun {
             if unsafe { libc::ioctl(fd.as_raw_fd(), 0x400454ca as libc::c_ulong, &mut req) } < 0 {
                 return Err(io::Error::last_os_error().into());
             }
-            Ok(Self(tokio::io::unix::AsyncFd::new(fd)?))
+            Ok(Self(tokio::io::unix::AsyncFd::register(fd)?))
         }
         pub async fn read(&self, buf: &mut [u8]) -> io::Result<usize> {
             loop {
