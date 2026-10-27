@@ -1,5 +1,5 @@
 id,feature,area,priority,original,clone,notes
-F001,Обзор сети и серверов,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F001,Обзор сети и серверов,Администратор,must,requested extension,partial,Реальные счётчики API и inventory UI; топология/агрегация health ещё не подключены.
 F002,SSH пароль и логин,Администратор,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F003,SSH private key и passphrase,Администратор,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F004,SSH user certificate,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
@@ -7,52 +7,52 @@ F005,Проверка и закрепление host key,Администрат�
 F006,Read-only обследование перед установкой,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F007,План изменений и откат установки,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F008,Установка control plane на сервер,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F009,Установка агента ноды,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F009,Установка агента ноды,Администратор,must,requested extension,partial,DEB агента установлен и mTLS-проверен на двух серверах; мастер установки приложения ещё не подключён.
 F010,Возобновление прерванной установки,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F011,Добавление и редактирование серверов,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F011,Добавление и редактирование серверов,Администратор,must,requested extension,yes,Записи серверов: create/edit/delete через API и UI; native HTTP-приёмка PASS. Установка/удаление ПО отслеживаются отдельно.
 F012,Добавление и удаление нод,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F013,Удаление ПО ноды с сервера,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F014,Drain активных сессий,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F015,Группы нод,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F016,Домены: добавление редактирование удаление,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F016,Домены: добавление редактирование удаление,Администратор,must,requested extension,yes,"CRUD записей доменов и назначение/отвязка сервера; IDNA, audit, native HTTP-приёмка PASS. DNS/TLS проверяются отдельно."
 F017,Проверка DNS и сертификатов,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F018,Отключение профилей с отсутствующими prerequisites,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F019,Работа по IP без отключения TLS trust,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F018,Отключение профилей с отсутствующими prerequisites,Администратор,must,requested extension,partial,Core проверяет prerequisites/неизвестную готовность; полного управления профилями engines ещё нет.
+F019,Работа по IP без отключения TLS trust,Администратор,must,requested extension,partial,IP SAN/TLS trust проверены на живых агентах и Link CLI; подключение приложения ещё не интегрировано.
 F020,WARP egress,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F021,Цепочка Entry→Exit,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F022,Nested tunnel с защитой от Entry,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F023,Балансировка и sticky assignment,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F024,Статистика пользователей,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F025,Мониторинг CPU RAM диска и сети,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F026,Проверка управляемых TCP UDP портов,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F025,Мониторинг CPU RAM диска и сети,Администратор,must,requested extension,partial,Агент возвращает реальные память/load/disk/network; polling/CPU-percent/UI-мониторинг ещё не подключены.
+F026,Проверка управляемых TCP UDP портов,Администратор,must,requested extension,partial,Агент читает слушающие порты Linux; внешняя доступность/управляемые probes ещё не реализованы.
 F027,Protocol-level health probe,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F028,Антенны свободной ёмкости и загрузка,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F029,Красный жёлтый зелёный серый статусы,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F029,Красный жёлтый зелёный серый статусы,Администратор,must,requested extension,partial,UI сохраняет unknown/unavailable; нет полного runtime health для трёхцветной индикации.
 F030,Device↔node speedtest,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F031,Node↔test endpoint speedtest,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F032,Push Android macOS Windows,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F033,Независимый наблюдатель отказа primary,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F034,Создание пользователя: имя фамилия телефон email,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F035,Выпуск кода ссылки QR подписки,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F036,Срок подписки: 0 бессрочно,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F037,Лимит зарегистрированных устройств: 0 неограниченно,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F038,Атомарная регистрация устройств,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F039,Индивидуальные credentials и leases,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F040,Блокировка пользователя и прекращение сессий,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F041,Удаление пользователя и отзыв доступа,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F042,Отзыв и перевыпуск подписки,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F034,Создание пользователя: имя фамилия телефон email,Администратор,must,requested extension,yes,Создание пользователя с указанными полями через API/UI; native HTTP-приёмка PASS.
+F035,Выпуск кода ссылки QR подписки,Администратор,must,requested extension,partial,Выпуск/ротация кода через API; full link/QR delivery ещё не завершены.
+F036,Срок подписки: 0 бессрочно,Администратор,must,requested extension,partial,0 бессрочно в бизнес-политике/API; end-to-end VPN enforcement ещё не подключён.
+F037,Лимит зарегистрированных устройств: 0 неограниченно,Администратор,must,requested extension,partial,0 без лимита и атомарные registered-device slots в API; lifecycle устройств в приложении ещё не завершён.
+F038,Атомарная регистрация устройств,Администратор,must,requested extension,yes,Атомарное зачисление устройства с доказательством Ed25519 и конкурентными лимитами; PostgreSQL-тесты PASS.
+F039,Индивидуальные credentials и leases,Администратор,must,requested extension,partial,Индивидуальный device key и конечные подписанные Link leases; control→node выдача/renew ещё не интегрированы.
+F040,Блокировка пользователя и прекращение сессий,Администратор,must,requested extension,partial,API/UI блокирует и инвалидирует enrollment; остановка действующих VPN-сессий ещё не интегрирована.
+F041,Удаление пользователя и отзыв доступа,Администратор,must,requested extension,partial,Удаление пользователя API/UI проверено; полный runtime revoke ещё не интегрирован.
+F042,Отзыв и перевыпуск подписки,Администратор,must,requested extension,partial,API revoke/rotate реализованы и протестированы; runtime revoke/полный UI ещё не завершены.
 F043,Pairing второго Admin-устройства,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F044,Роли owner operator viewer,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F045,Отзыв админского устройства и recovery,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F046,Смена главного сервера и fencing,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F047,Резервное копирование и проверка восстановления,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F048,Audit событий без секретов,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F048,Audit событий без секретов,Администратор,must,requested extension,partial,Append-only API inventory audit в PostgreSQL; все остальные события/audit UI ещё не завершены.
 F049,Встроенное VPN подключение в Admin,Администратор,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F050,Импорт подписки код ссылка QR файл,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F051,Выбор сервера и Auto,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F052,Выбор протокола и Auto,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F050,Импорт подписки код ссылка QR файл,Клиент,must,requested extension,partial,Enrollment по текстовому коду реализован; QR/file/full-link import ещё не завершены.
+F051,Выбор сервера и Auto,Клиент,must,requested extension,partial,Интерфейс выбора есть; рабочий runtime/server Auto ещё не подключён.
+F052,Выбор протокола и Auto,Клиент,must,requested extension,partial,Каталог и prerequisites есть; рабочие protocol engines/Auto ещё не подключены.
 F053,Подключение отключение переподключение,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F054,Реальный TUN IPv4 IPv6,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F054,Реальный TUN IPv4 IPv6,Клиент,must,requested extension,partial,Реальный IPv4 TUN на двух Linux-хостах PASS; IPv6 и клиентские OS adapters ещё не завершены.
 F055,Kill switch без утечек при сбое,Клиент,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F056,DNS без утечек,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F057,Весь трафик через VPN,Клиент,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
@@ -62,22 +62,22 @@ F060,Только выбранные приложения macOS,Клиент,mus
 F061,Все кроме выбранных macOS,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F062,Только выбранные приложения Android,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F063,Все кроме выбранных Android,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F064,Split по сайтам доменам IP,Клиент,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F064,Split по сайтам доменам IP,Клиент,must,source/reference,partial,Core policy и сохранение исключений проверены; системное применение маршрутов ещё не подключено.
 F065,Доступность сервера и протокола отдельно,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F066,Личная статистика,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F067,Срок и статус подписки,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F067,Срок и статус подписки,Клиент,must,requested extension,partial,Политика expiry/enrollment API реализована; полный клиентский экран/синхронизация ещё не завершены.
 F068,Список и отзыв своих устройств,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F069,Автоподключение и смена Wi-Fi mobile,Клиент,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F070,Диагностика с редактированием секретов,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F071,Экспорт raw config с указанными ограничениями,Клиент,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F072,Резервная копия настроек,Клиент,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F073,Доверенное обновление приложения,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F074,Тёмная светлая темы и доступность,Клиент,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F075,Собственное управляющее TAVRA Core,Протоколы,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F076,Собственный TAVRA Link QUIC DATAGRAM,Протоколы,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F074,Тёмная светлая темы и доступность,Клиент,must,requested extension,partial,Тёмная тема и узкий экран проверены; светлая тема и полная accessibility-приёмка ещё не завершены.
+F075,Собственное управляющее TAVRA Core,Протоколы,must,requested extension,partial,Собственные Rust core/control/policy/Link/shield/node реализованы; полный orchestration/runtime ещё не завершён.
+F076,Собственный TAVRA Link QUIC DATAGRAM,Протоколы,must,requested extension,partial,QUIC DATAGRAM собственный wire/admission; живой Linux TUN PASS. Multi-user/full-client integration ещё не завершены.
 F077,TAVRA Link TLS TCP fallback,Протоколы,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F078,TAVRA Link в camouflage оболочке,Протоколы,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F079,TAVRA Link auth replay fuzz DoS tests,Протоколы,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F079,TAVRA Link auth replay fuzz DoS tests,Протоколы,must,requested extension,partial,Неверные auth/TLS/nonce/deadline и bounded codecs протестированы; fuzz/DoS полный gate ещё не завершён.
 F080,AmneziaWG Legacy,Протоколы,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F081,AmneziaWG 2,Протоколы,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
 F082,WireGuard,Протоколы,must,source/reference,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
@@ -117,36 +117,36 @@ F115,Приёмка из сетей Китая,DPI,must,requested extension,no,�
 F116,Приёмка из сетей Ирана,DPI,must,requested extension,no,Региональная проверка требует измерений из соответствующей сети; гарантия невидимости не заявляется
 F117,Приёмка из сетей ОАЭ,DPI,must,requested extension,no,Региональная проверка требует измерений из соответствующей сети; гарантия невидимости не заявляется
 F118,Отметки operator date last successful profile,DPI,must,requested extension,no,Региональная проверка требует измерений из соответствующей сети; гарантия невидимости не заявляется
-F119,GitHub исходники и релизы,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F120,Windows Client EXE,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F121,Windows Admin EXE,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F122,macOS Client arm64 x64 PKG DMG,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F123,macOS Admin arm64 x64 PKG DMG,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F124,Android Client APK,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F125,Android Admin APK,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F126,Ubuntu22 amd64 arm64 DEB,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F127,Ubuntu24 amd64 arm64 DEB,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F128,Ubuntu26 amd64 arm64 DEB,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
+F119,GitHub исходники и релизы,Выпуск,must,requested extension,yes,Исходники main и публичный prerelease v0.1.0-preview.1 с исходниками/установщиками опубликованы.
+F120,Windows Client EXE,Выпуск,must,requested extension,partial,Общий Admin/Client preview EXE собран и install/uninstall PASS; отдельный production Client/VPN runtime ещё не завершён.
+F121,Windows Admin EXE,Выпуск,must,requested extension,partial,Общий Admin/Client preview EXE собран; отдельный production Admin/VPN runtime ещё не завершён.
+F122,macOS Client arm64 x64 PKG DMG,Выпуск,must,requested extension,partial,Универсальный arm64+x86_64 preview PKG/DMG проверен; production Client/signing/VPN runtime ещё не завершены.
+F123,macOS Admin arm64 x64 PKG DMG,Выпуск,must,requested extension,partial,Универсальный arm64+x86_64 preview PKG/DMG проверен; отдельный production Admin ещё не завершён.
+F124,Android Client APK,Выпуск,must,requested extension,partial,"Общий arm64 development APK собран, apksigner PASS; device/VPN runtime и production Client ещё не завершены."
+F125,Android Admin APK,Выпуск,must,requested extension,partial,Общий arm64 development APK собран; отдельный production Admin ещё не завершён.
+F126,Ubuntu22 amd64 arm64 DEB,Выпуск,must,requested extension,partial,Ubuntu22 amd64 DEB install/remove PASS; arm64 build ещё не проверен.
+F127,Ubuntu24 amd64 arm64 DEB,Выпуск,must,requested extension,partial,Ubuntu24 amd64 DEB install/remove и живой node PASS; arm64 build ещё не проверен.
+F128,Ubuntu26 amd64 arm64 DEB,Выпуск,must,requested extension,partial,Ubuntu26 amd64 DEB install/remove и живой node PASS; arm64 build ещё не проверен.
 F129,Platform signing и доверие обновлений,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F130,Install upgrade uninstall smoke,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F131,SBOM лицензии third-party notices checksums,Выпуск,must,requested extension,no,Целевой объём; реализация и runtime-приёмка ещё не выполнены
-F132,LAN bypass IPv4 IPv6,Маршрутизация,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
-F133,Исключения сайтов с IDNA и границей домена,Маршрутизация,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
-F134,Исключения IPv4 IPv6 адресов и CIDR подсетей,Маршрутизация,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
-F135,Локальное сохранение настроек устройства,Маршрутизация,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
-F136,Фоновая работа при закрытии окна macOS,Фоновая работа,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
-F137,Фоновая работа при закрытии окна Windows,Фоновая работа,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F130,Install upgrade uninstall smoke,Выпуск,must,requested extension,partial,Windows и Linux install/uninstall PASS; upgrade и полная macOS/Android runtime установка ещё не проверены.
+F131,SBOM лицензии third-party notices checksums,Выпуск,must,requested extension,partial,SHA256SUMS/source dependency inventory и build-input provenance; полный runtime SBOM/licensing gate ещё не завершён.
+F132,LAN bypass IPv4 IPv6,Маршрутизация,must,explicit user addition 2026-10-27,partial,LAN IPv4/IPv6 policy и сохранение настроек; OS enforcement ещё не подключён.
+F133,Исключения сайтов с IDNA и границей домена,Маршрутизация,must,explicit user addition 2026-10-27,partial,IDNA/границы domain policy и сохранение; OS enforcement ещё не подключён.
+F134,Исключения IPv4 IPv6 адресов и CIDR подсетей,Маршрутизация,must,explicit user addition 2026-10-27,partial,IPv4/IPv6/CIDR policy и сохранение; OS enforcement ещё не подключён.
+F135,Локальное сохранение настроек устройства,Маршрутизация,must,explicit user addition 2026-10-27,partial,shared_preferences/local policy + native plugin; полный restart/secure storage gate ещё не завершён.
+F136,Фоновая работа при закрытии окна macOS,Фоновая работа,must,explicit user addition 2026-10-27,yes,macOS: реальное закрытие AX сохраняет процесс/окно; reopen и явный Cmd-Q проверены. VPN runtime в UI отдельно.
+F137,Фоновая работа при закрытии окна Windows,Фоновая работа,must,explicit user addition 2026-10-27,partial,Windows tray source собран MSVC; реальный close/reopen runtime ещё не проверен.
 F138,Android foreground VPN при закрытом UI,Фоновая работа,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
-F139,Tray menu reopen и отдельный выход,Фоновая работа,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F139,Tray menu reopen и отдельный выход,Фоновая работа,must,explicit user addition 2026-10-27,partial,macOS close/reopen/quit проверены; Windows tray runtime ещё не проверен.
 F140,Запуск приложения при входе в ОС по настройке,Фоновая работа,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
-F141,TAVRA Shield блокировка рекламы DNS,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
-F142,Блокировка трекеров DNS,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
-F143,Защита от фишинговых вредоносных доменов,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
-F144,Фильтры раздражителей cookie popup,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
-F145,DNS DoH DoT QUIC upstream,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
-F146,Списки фильтров версии обновления rollback,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
-F147,Пользовательские allow block правила,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
-F148,Счётчики реально заблокированных запросов,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F141,TAVRA Shield блокировка рекламы DNS,Защита,must,explicit user addition 2026-10-27,partial,DNS rule engine/loopback UDP harness и counters; system DNS integration ещё не подключена.
+F142,Блокировка трекеров DNS,Защита,must,explicit user addition 2026-10-27,partial,Категория trackers в rule engine/harness; system DNS integration ещё не подключена.
+F143,Защита от фишинговых вредоносных доменов,Защита,must,explicit user addition 2026-10-27,partial,Категория malware в rule engine/harness; production feeds/system enforcement ещё не подключены.
+F144,Фильтры раздражителей cookie popup,Защита,must,explicit user addition 2026-10-27,partial,DNS-category annoyances rules; cosmetic cookie-popup filtering ещё не реализован.
+F145,DNS DoH DoT QUIC upstream,Защита,must,explicit user addition 2026-10-27,partial,Настройки URI upstream сохраняются/валидируются; DoH/DoT/DoQ runtime ещё не подключён.
+F146,Списки фильтров версии обновления rollback,Защита,must,explicit user addition 2026-10-27,partial,URLs фильтров сохраняются/валидируются; fetching/version/update/rollback ещё не реализованы.
+F147,Пользовательские allow block правила,Защита,must,explicit user addition 2026-10-27,partial,Allow/block IDNA rule precedence и настройки реализованы; system enforcement ещё не подключён.
+F148,Счётчики реально заблокированных запросов,Защита,must,explicit user addition 2026-10-27,partial,Реальные счётчики в DNS harness; системная статистика/UI ещё не подключены.
 F149,Локальный отключаемый журнал запросов retention,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
 F150,Per-app и per-site исключения фильтрации,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
 F151,Временная пауза фильтрации,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
@@ -154,4 +154,4 @@ F152,Родительский контроль safe search категории,З
 F153,Browser cosmetic filtering element picker,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
 F154,Опциональная HTTPS content filtering с согласием,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
 F155,Единый Android service VPN и фильтрация,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
-F156,TrustTunnel подпись протокол AdGuard VPN,Защита,must,explicit user addition 2026-10-27,no,Tracked full requirement; foundation code/settings do not establish runtime acceptance
+F156,TrustTunnel подпись протокол AdGuard VPN,Защита,must,explicit user addition 2026-10-27,partial,TrustTunnel/AdGuard VPN указан в каталоге; engine интеграция ещё не выполнена.

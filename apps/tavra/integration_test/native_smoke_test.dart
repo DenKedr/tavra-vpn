@@ -25,6 +25,24 @@ void main() {
       await settle();
     }
 
+    Future<void> navigate(String label) => tap(
+      find.descendant(
+        of: find.byWidgetPredicate(
+          (w) => w is NavigationRail || w is NavigationBar,
+        ),
+        matching: find.text(label),
+      ),
+    );
+    final check = TavraApi('http://127.0.0.1:8790');
+    addTearDown(check.close);
+    Future<dynamic> read(String path) async {
+      dynamic value;
+      await tester.runAsync(() async {
+        value = await check.request('GET', path);
+      });
+      return value;
+    }
+
     Finder field(String label) => find.widgetWithText(TextFormField, label);
     await tester.binding.setSurfaceSize(const Size(320, 700));
     addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -86,7 +104,6 @@ void main() {
     await tap(find.text('Добавить'));
     await tap(find.text('Сохранить настройки'));
     expect(find.textContaining('Настройки сохранены.'), findsOneWidget);
-    final check = TavraApi('http://127.0.0.1:8790');
     await tester.runAsync(() async {
       await check.login(testKey);
       final settings = await check.request('GET', '/settings');
@@ -94,8 +111,98 @@ void main() {
       expect(settings['excluded_sites'], contains('example.org'));
       expect(settings['excluded_networks'], contains('10.23.0.0/16'));
       expect(await check.request('GET', '/users'), isEmpty);
-      check.close();
     });
+    expect(tester.takeException(), isNull);
+
+    // Inventory changes never provision reserved-address hosts or alter DNS.
+    await navigate('Серверы');
+    await tap(find.text('Добавить'));
+    await tester.enterText(field('Название'), 'Native inventory');
+    await tester.enterText(field('IP или имя хоста'), '198.51.100.10');
+    await tap(find.text('Сохранить'));
+    expect(find.text('Native inventory'), findsOneWidget);
+    await tap(find.text('Изменить'));
+    await tester.enterText(field('Название'), 'Native edited');
+    await tester.enterText(field('SSH порт'), '2222');
+    await tap(find.text('Сохранить'));
+    final servers = await read('/servers') as List;
+    expect(servers, hasLength(1));
+    final serverId = servers.single['id'];
+    expect(servers.single['name'], 'Native edited');
+    expect(servers.single['host'], '198.51.100.10');
+    expect(servers.single['ssh_port'], 2222);
+    expect(servers.single['status'], 'not_provisioned');
+
+    await navigate('Домены');
+    await tap(find.text('Добавить домен'));
+    await tester.enterText(field('Домен'), 'NATIVE-SMOKE.EXAMPLE.');
+    await tap(find.byType(DropdownButtonFormField<String>));
+    await tap(find.text('Native edited').last);
+    await tap(find.text('Сохранить'));
+    expect(find.text('native-smoke.example'), findsOneWidget);
+    var domains = await read('/domains') as List;
+    expect(domains, hasLength(1));
+    expect(domains.single['server_id'], serverId);
+    expect(domains.single['verification_status'], 'unverified');
+
+    await tap(find.text('Изменить'));
+    await tester.enterText(field('Домен'), 'native-edited.example');
+    await tap(find.byType(DropdownButtonFormField<String>));
+    await tap(find.text('Не назначен').last);
+    await tap(find.text('Сохранить'));
+    domains = await read('/domains') as List;
+    expect(domains.single['name'], 'native-edited.example');
+    expect(domains.single['server_id'], isNull);
+    expect(domains.single['verification_status'], 'unverified');
+    expect(find.text('Сервер: Не назначен'), findsOneWidget);
+
+    await tap(find.text('Изменить'));
+    await tap(find.byType(DropdownButtonFormField<String>));
+    await tap(find.text('Native edited').last);
+    await tap(find.text('Сохранить'));
+    domains = await read('/domains') as List;
+    expect(domains.single['server_id'], serverId);
+
+    await navigate('Серверы');
+    await tap(find.text('Удалить из списка'));
+    expect(find.text('Удалить сервер из списка?'), findsOneWidget);
+    await tap(find.text('Отмена'));
+    expect(await read('/servers'), hasLength(1));
+    await tap(find.text('Удалить из списка'));
+    await tap(find.text('Подтвердить'));
+    expect(
+      find.textContaining('ПО на сервере не удалялось. Отвязано доменов: 1.'),
+      findsOneWidget,
+    );
+    expect(await read('/servers'), isEmpty);
+    domains = await read('/domains') as List;
+    expect(domains.single['name'], 'native-edited.example');
+    expect(domains.single['server_id'], isNull);
+    expect(domains.single['verification_status'], 'unverified');
+
+    // Verify the actual deletion response contract independently of UI copy.
+    await tester.runAsync(() async {
+      final probe = await check.request('POST', '/servers', {
+        'name': 'Deletion response probe',
+        'host': '198.51.100.10',
+        'ssh_port': 22,
+        'username': 'root',
+      });
+      final deleted = await check.request('DELETE', '/servers/${probe['id']}');
+      expect(deleted['deleted'], true);
+      expect(deleted['remote_uninstall_performed'], false);
+      expect(deleted['unassigned_domain_ids'], isEmpty);
+    });
+    await navigate('Домены');
+    expect(find.text('Сервер: Не назначен'), findsOneWidget);
+    await tap(find.text('Удалить домен'));
+    await tap(find.text('Отмена'));
+    expect(find.text('native-edited.example'), findsOneWidget);
+    expect(await read('/domains'), hasLength(1));
+    await tap(find.text('Удалить домен'));
+    await tap(find.text('Подтвердить'));
+    expect(find.text('native-edited.example'), findsNothing);
+    expect(await read('/domains'), isEmpty);
     expect(tester.takeException(), isNull);
     await tap(find.text('Клиент'));
     await tap(find.text('Маршрутизация и защита'));

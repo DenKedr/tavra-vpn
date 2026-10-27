@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'api.dart';
 import 'settings.dart';
 import 'dialog_fields.dart';
+import 'domains.dart';
 
 const navy = Color(0xff071a3b),
     ivory = Color(0xfff4eddc),
@@ -128,6 +129,7 @@ class _WorkspaceState extends State<Workspace> {
     'Пользователи',
     'Подписки',
     'Устройства',
+    'Домены',
     'Настройки',
   ];
   final icons = [
@@ -136,6 +138,7 @@ class _WorkspaceState extends State<Workspace> {
     Icons.people_outline,
     Icons.key_outlined,
     Icons.devices,
+    Icons.language,
     Icons.tune,
   ];
   void sessionExpired() {
@@ -195,7 +198,7 @@ class _WorkspaceState extends State<Workspace> {
   }
 
   Future<void> load() async {
-    if (api?.token == null || page == 5) return;
+    if (api?.token == null || page >= 5) return;
     final paths = [
       '/overview',
       '/servers',
@@ -258,6 +261,13 @@ class _WorkspaceState extends State<Workspace> {
   ]) async {
     await perform(() async {
       final result = await api!.request(method, path, body);
+      if (method == 'DELETE' &&
+          path.startsWith('/servers/') &&
+          result is Map &&
+          mounted)
+        notice(
+          'Запись удалена. ПО на сервере не удалялось. Отвязано доменов: ${(result['unassigned_domain_ids'] as List? ?? []).length}.',
+        );
       if (result is Map && result['invitation'] != null && mounted)
         await showInvitation(result['invitation']);
       await load();
@@ -349,6 +359,8 @@ class _WorkspaceState extends State<Workspace> {
                       : kind == 'user'
                       ? 'пользователя'
                       : 'подписку'}'
+                : kind == 'server'
+                ? 'Изменить сервер'
                 : 'Изменить пользователя',
           ),
           content: SizedBox(
@@ -463,7 +475,7 @@ class _WorkspaceState extends State<Workspace> {
       await mutate(
         row == null ? 'POST' : 'PATCH',
         kind == 'server'
-            ? '/servers'
+            ? '/servers${row == null ? '' : '/${row['id']}'}'
             : kind == 'user'
             ? '/users${row == null ? '' : '/${row['id']}'}'
             : '/subscriptions',
@@ -734,7 +746,8 @@ class _WorkspaceState extends State<Workspace> {
     ),
   );
   Widget adminView() {
-    if (page == 5) return SettingsView(api: api!);
+    if (page == 6) return SettingsView(api: api!);
+    if (page == 5) return DomainsView(api: api!);
     final title = labels[page];
     if (page == 0)
       return Column(
@@ -881,6 +894,24 @@ class _WorkspaceState extends State<Workspace> {
                 spacing: 8,
                 runSpacing: 8,
                 children: [
+                  if (page == 1) ...[
+                    TextButton(
+                      onPressed: busy ? null : () => edit('server', row),
+                      child: const Text('Изменить'),
+                    ),
+                    TextButton(
+                      onPressed: busy
+                          ? null
+                          : () async {
+                              if (await confirm(
+                                'Удалить сервер из списка?',
+                                'Удаляется только запись inventory. ПО на сервере не удаляется; SSH, VPN и firewall не изменяются. Назначенные домены сохранятся без сервера.',
+                              ))
+                                await mutate('DELETE', '/servers/$id');
+                            },
+                      child: const Text('Удалить из списка'),
+                    ),
+                  ],
                   if (page == 2) ...[
                     TextButton(
                       onPressed: busy ? null : () => edit('user', row),

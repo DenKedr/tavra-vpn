@@ -11,7 +11,7 @@ def main():
     parsed = urllib.parse.urlparse(database)
     env = dict(os.environ, PGDATABASE='tavra_test', PGHOST=parsed.hostname or '127.0.0.1', PGPORT=str(parsed.port or 5432), PGUSER=urllib.parse.unquote(parsed.username or ''), PGPASSWORD=urllib.parse.unquote(parsed.password or ''))
     subprocess.run(['psql', '-X', '-q', '-v', 'ON_ERROR_STOP=1', '-c',
-      'TRUNCATE admins,sessions,users,subscriptions,challenges,devices,servers,app_settings CASCADE; UPDATE security_clock SET high_water=0,generation=generation+1'], env=env, check=True)
+      'TRUNCATE admins,sessions,users,subscriptions,challenges,devices,servers,domains,inventory_audit,app_settings CASCADE; UPDATE security_clock SET high_water=0,generation=generation+1'], env=env, check=True)
     env.update(TAVRA_DATABASE_URL=database, TAVRA_BOOTSTRAP_SECRET=BOOTSTRAP, TAVRA_BIND='127.0.0.1:8790')
     log = open(RUNTIME / 'native-test-control.log', 'w')
     process = subprocess.Popen([str(ROOT / 'target/debug/tavra-control')], env=env, stdout=log, stderr=log)

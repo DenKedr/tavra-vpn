@@ -3,6 +3,8 @@ pub mod auth;
 pub mod config;
 pub mod db;
 pub mod devices;
+pub mod domains;
+mod inventory;
 pub mod servers;
 pub mod settings;
 pub mod subscriptions;
@@ -171,6 +173,15 @@ pub fn router(state: AppState) -> Router {
         .route("/v1/devices", get(devices::list))
         .route("/v1/devices/{id}", delete(devices::revoke))
         .route("/v1/servers", get(servers::list).post(servers::create))
+        .route(
+            "/v1/servers/{id}",
+            patch(servers::update).delete(servers::remove),
+        )
+        .route("/v1/domains", get(domains::list).post(domains::create))
+        .route(
+            "/v1/domains/{id}",
+            patch(domains::update).delete(domains::remove),
+        )
         .route("/v1/overview", get(overview))
         .route(
             "/v1/settings",

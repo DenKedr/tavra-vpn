@@ -1,6 +1,8 @@
 # TAVRA Preview: сборка и установка
 
-Development preview общего Flutter-приложения с режимами Admin/Client, control API и node management agent. VPN runtime к UI ещё не подключён. Установщик не означает работающий VPN или готовность полного продукта. `tavra-link` пока библиотека без CLI.
+Development preview общего Flutter-приложения с режимами Admin/Client, control API и node management agent. VPN runtime к UI ещё не подключён. Установщик не означает работающий VPN или готовность полного продукта. Отдельный экспериментальный Linux `tavra-link-cli` включён в архив для изолированного TUN-теста; это ещё не multi-user VPN daemon.
+
+[Опубликованный Preview1](https://github.com/DenKedr/tavra-vpn/releases/tag/v0.1.0-preview.1): CI40413857045 прошёл все6jobs. macOS app universal arm64+x86_64, структура codesign/PKG/DMG проверена; Apple DeveloperID/notarization отсутствуют. Windows Setup прошёл тихую установку/удаление. APK integrity/apksigner прошли, установка на Android-устройство пока не проверена. Более новые исходники inventory CRUD не входят в Preview1.
 
 ## Проверяемые gates
 
